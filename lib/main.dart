@@ -29,6 +29,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var userInput='';
   var answer='';
+  double number1=0.0; var operand=''; double number2=0.0;
 
   bool isOperator(String x){
     if(x=='+' || x=='-' || x=='/' || x=='x' ||x=='=')
@@ -84,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
 
         Expanded(
-          flex: 2,
+          flex: 3,
           child: Container(
             child: GridView.builder(
               itemCount: buttons.length,
@@ -108,6 +109,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 // +/- button
                 else if(index==1){
                   return MyButton(
+                    buttonTapped: (){
+                      setState(() {
+                        double number;
+                        try{
+                          number=double.parse(userInput);
+                          number*=-1;
+                          answer=number.toString();
+                        }catch(e){
+                          answer='error';
+                        }
+                      });
+                    },
                     buttonText: buttons[index],
                     color: Colors.blue[50],
                     textColor: Colors.black,
@@ -117,9 +130,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 // % button
                 else if(index==2){
                   return MyButton(
-                    buttonTapped: (){
+                    buttonTapped:(){
                       setState(() {
-                        userInput+=buttons[index];
+                        double number;
+                        try{
+                          number=double.parse(userInput);
+                          number1=number/100;
+                          answer=number1.toString();
+                        }catch(e){
+                          answer='error';
+                        }
                       });
                     },
                     buttonText: buttons[index],
@@ -133,6 +153,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   return MyButton(
                     buttonTapped: (){
                       setState(() {
+                        if(userInput.isEmpty){
+                          return;
+                        }
                         userInput=userInput.substring(0, userInput.length-1);
                       });
                     },
@@ -168,7 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: isOperator(buttons[index])?Colors.blue:Colors.white,
                     textColor: isOperator(buttons[index])?Colors.white:Colors.black,
                   );
-                };
+                }
               },
             ),
           ),
@@ -212,4 +235,3 @@ class MyButton extends StatelessWidget {
     );
   }
 }
-
